@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "ComponentsByID Browser Ext",
+  "version": "1.0",
+  "description": "Add borders and display IDs for web elements",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "browser_action": {
+    "default_icon": {
+      "48": "icons/icon48.png"
+    },
+    "default_title": "ComponentsByID Browser Ext",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

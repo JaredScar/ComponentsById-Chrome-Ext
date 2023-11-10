@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Borders Extension</title>
+    <style>
+        body {
+            width: 250px;
+            padding: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+        }
+        .bordered-element {
+            border: 2px solid red; /* Adjust border styles as needed */
+            box-sizing: border-box; /* Ensures borders are included in the element's dimensions */
+        }
+    </style>
+    <script src="popup.js"></script>
+</head>
+<body>
+<label for="trackingInput">Enter tracking strings (comma-separated):</label>
+<input type="text" id="trackingInput" placeholder="e.g., button, header, footer" />
+<button id="toggleButton">Toggle Borders</button>
+</body>
+</html>
