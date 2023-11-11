@@ -1,0 +1,13 @@
+.bordered-element {
+    border: 2px solid red; /* Adjust border styles as needed */
+    box-sizing: border-box; /* Ensures borders are included in the element's dimensions */
+}
+
+.cbi-header {
+    top: -20px; /* Adjust the position as needed */
+    left: 0;
+    background-color: red; /* Adjust the background color as needed */
+    color: white; /* Adjust the text color as needed */
+    padding: 5px; /* Adjust the padding as needed */
+    z-index: 10001; /* Place the header above other elements */
+}

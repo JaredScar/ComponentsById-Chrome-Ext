@@ -30,4 +30,10 @@ declare namespace chrome {
             set(items: { [key: string]: any }, callback?: () => void): void;
         };
     }
+
+    namespace extension {
+        // Add extension-related interfaces or functions here
+        // For example:
+        const getURL: (path: string) => string;
+    }
 }
