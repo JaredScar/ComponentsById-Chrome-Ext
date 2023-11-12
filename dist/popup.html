@@ -6,7 +6,7 @@
     <title>Element Borders Extension</title>
     <style>
         body {
-            width: 250px;
+            width: 600px;
             padding: 10px;
         }
 
@@ -23,12 +23,21 @@
         button {
             width: 100%;
         }
+        .popup-link {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .popup-link:hover {
+            opacity: .5;
+        }
     </style>
     <script src="popup.js"></script>
 </head>
 <body>
-<label for="trackingInput">Enter tracking strings (comma-separated):</label>
-<input type="text" id="trackingInput" placeholder="e.g., button, header, footer" />
-<button id="toggleButton">Toggle Borders</button>
+    <label for="trackingInput">Enter tracking strings (comma-separated):</label>
+    <input type="text" id="trackingInput" placeholder="e.g., button, header, footer" />
+    <button id="toggleButton">Toggle Borders</button>
+    <div id="components">
+    </div>
 </body>
 </html>

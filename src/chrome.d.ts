@@ -5,6 +5,7 @@ declare namespace chrome {
         const onMessage: {
             addListener(func: any): void;
         };
+        function sendMessage(message: any): void;
     }
 
     namespace tabs {
@@ -20,7 +21,7 @@ declare namespace chrome {
         ): void;
         function sendMessage(
             message: any,
-            responseCallback?: { trackingStrings: string[]; action: string }
+            responseCallback?: { data: any; action: string }
         ): void;
     }
 
