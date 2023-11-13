@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         trackingInput.value = storedTrackingStrings.join(',');
     });
     chrome.storage.sync.get('compsList', (data) => {
-        if (compsList)
+        if (compsList && isBordersOn)
             compsList.innerHTML = data.compsList || '';
     });
 
