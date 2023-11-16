@@ -2,3 +2,7 @@
     border: 2px solid red; /* Adjust border styles as needed */
     box-sizing: border-box; /* Ensures borders are included in the element's dimensions */
 }
+
+.bordered-element::before {
+    content: '⬤';
+}

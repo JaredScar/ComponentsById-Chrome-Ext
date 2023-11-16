@@ -60,9 +60,18 @@ function updateBorders() {
         if (bordersEnabled && matchesTrackingStrings(element.id) && htmlEle.style.display != 'none') {
             // Check if the element already has borders
             oldBorderColors[htmlEle.id] = htmlEle.style.borderColor;
-            if (!element.classList.contains('bordered-element')) {
-                // Add borders to the element
-                element.classList.add('bordered-element');
+            let ele = document.createElement("div");
+            let parentEle = element.parentElement;
+            if (parentEle != null) {
+                ele.classList.add("bordered-element");
+                parentEle.insertBefore(ele, element);
+                ele.appendChild(element);
+            }
+            else {
+                if (!element.classList.contains('bordered-element')) {
+                    // Add borders to the element
+                    element.classList.add('bordered-element');
+                }
             }
             const randCol = getRandomColor();
             htmlEle.style.borderColor = randCol + "";

@@ -13,12 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggleButton');
     const trackingInput = document.getElementById('trackingInput');
     let compsList = document.getElementById("components");
+    chrome.storage.sync.get("isBordersOn", (data) => {
+        isBordersOn = data.isBordersOn || false;
+    });
     chrome.storage.sync.get('trackingStrings', (data) => {
         const storedTrackingStrings = data.trackingStrings || [];
         trackingInput.value = storedTrackingStrings.join(',');
     });
     chrome.storage.sync.get('compsList', (data) => {
-        if (compsList)
+        if (compsList && isBordersOn)
             compsList.innerHTML = data.compsList || '';
     });
     toggleButton.addEventListener('click', () => {
@@ -26,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
+                chrome.storage.sync.set({ "isBordersOn": isBordersOn });
                 chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings });
             }
         });
