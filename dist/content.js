@@ -52,6 +52,7 @@ function getRandomColor() {
     return randomColor;
 }
 let oldBorderColors = {};
+let addedDivs = {};
 function updateBorders() {
     compIds = [];
     const elements = document.querySelectorAll('*');
@@ -66,6 +67,7 @@ function updateBorders() {
                 ele.classList.add("bordered-element");
                 parentEle.insertBefore(ele, element);
                 ele.appendChild(element);
+                addedDivs[element.id] = ele;
             }
             else {
                 if (!element.classList.contains('bordered-element')) {
@@ -85,6 +87,11 @@ function updateBorders() {
                 htmlEle.style.borderColor = oldColor;
             else
                 htmlEle.style.borderColor = '';
+            const addedDiv = addedDivs[element.id];
+            if (addedDiv && addedDiv.parentElement) {
+                addedDiv.parentElement.replaceChild(element, addedDiv);
+                delete addedDivs[element.id];
+            }
             element.classList.remove('bordered-element');
         }
     });

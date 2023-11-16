@@ -57,6 +57,13 @@ function getRandomColor() {
     return randomColor;
 }
 let oldBorderColors: {[str: string]: string} = {};
+let addedDivs: {[elementId: string]: HTMLDivElement} = {};
+const dataTracker: {[elementId: string]: {
+        borderColor: string,
+        borderWidth: string,
+        newDiv: HTMLDivElement | null
+    }
+} = {};
 function updateBorders() {
     compIds = [];
     const elements = document.querySelectorAll('*');
@@ -64,13 +71,16 @@ function updateBorders() {
         const htmlEle = element as HTMLElement;
         if (bordersEnabled && matchesTrackingStrings(element.id) && htmlEle.style.display != 'none') {
             // Check if the element already has borders
-            oldBorderColors[htmlEle.id] = htmlEle.style.borderColor;
+            const data = dataTracker[element.id] || {};
+            data.borderColor = htmlEle.style.borderColor;
+            data.borderWidth = htmlEle.style.borderWidth;
             let ele = document.createElement("div");
             let parentEle = element.parentElement;
             if (parentEle != null) {
-                ele.classList.add("bordered-element");
                 parentEle.insertBefore(ele, element);
+                ele.classList.add("bordered-element");
                 ele.appendChild(element);
+                data.newDiv = ele;
             } else {
                 if (!element.classList.contains('bordered-element')) {
                     // Add borders to the element
@@ -83,11 +93,19 @@ function updateBorders() {
         } else {
             // Remove borders from the element
             const htmlEle = element as HTMLElement;
-            const oldColor = oldBorderColors[htmlEle.id];
+            const oldColor = dataTracker[htmlEle.id] != null ? dataTracker[htmlEle.id].borderColor : null;
             if (oldColor)
                 htmlEle.style.borderColor = oldColor;
             else
                 htmlEle.style.borderColor = '';
+            const dt = dataTracker[htmlEle.id] != null ? dataTracker[htmlEle.id] : null;
+            if (dt != null) {
+                const addedDiv = dt.newDiv;
+                if (addedDiv && addedDiv.parentElement) {
+                    addedDiv.parentElement.replaceChild(element, addedDiv);
+                    delete addedDivs[element.id];
+                }
+            }
             element.classList.remove('bordered-element');
         }
     });
