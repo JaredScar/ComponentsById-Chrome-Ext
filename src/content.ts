@@ -56,12 +56,11 @@ function getRandomColor() {
 
     return randomColor;
 }
-let oldBorderColors: {[str: string]: string} = {};
-let addedDivs: {[elementId: string]: HTMLDivElement} = {};
 const dataTracker: {[elementId: string]: {
         borderColor: string,
         borderWidth: string,
-        newDiv: HTMLDivElement | null
+        newDiv: HTMLDivElement | null,
+        headerEle: HTMLDivElement | null
     }
 } = {};
 function updateBorders() {
@@ -75,10 +74,16 @@ function updateBorders() {
             data.borderColor = htmlEle.style.borderColor;
             data.borderWidth = htmlEle.style.borderWidth;
             let ele = document.createElement("div");
+            let divEle = document.createElement("div");
+            divEle.innerHTML = element.id;
             let parentEle = element.parentElement;
             if (parentEle != null) {
                 parentEle.insertBefore(ele, element);
                 ele.classList.add("bordered-element");
+                data.headerEle = divEle;
+                divEle.style.backgroundColor = "white";
+                divEle.style.color = "black";
+                ele.appendChild(divEle);
                 ele.appendChild(element);
                 data.newDiv = ele;
             } else {
@@ -88,8 +93,10 @@ function updateBorders() {
                 }
             }
             const randCol = getRandomColor();
-            htmlEle.style.borderColor = randCol + "";
+            ele.style.borderColor = randCol + "";
+            ele.style.backgroundColor = randCol + "";
             compIds.push({id: element.id, color: randCol});
+            dataTracker[htmlEle.id] = data;
         } else {
             // Remove borders from the element
             const htmlEle = element as HTMLElement;
@@ -102,8 +109,11 @@ function updateBorders() {
             if (dt != null) {
                 const addedDiv = dt.newDiv;
                 if (addedDiv && addedDiv.parentElement) {
+                    if (dt.headerEle != null) {
+                        addedDiv.removeChild(dt.headerEle);
+                    }
                     addedDiv.parentElement.replaceChild(element, addedDiv);
-                    delete addedDivs[element.id];
+                    delete dataTracker[element.id];
                 }
             }
             element.classList.remove('bordered-element');

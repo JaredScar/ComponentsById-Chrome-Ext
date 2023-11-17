@@ -51,8 +51,7 @@ function getRandomColor() {
     const randomColor = `rgb(${randomRed}, ${randomGreen}, ${randomBlue})`;
     return randomColor;
 }
-let oldBorderColors = {};
-let addedDivs = {};
+const dataTracker = {};
 function updateBorders() {
     compIds = [];
     const elements = document.querySelectorAll('*');
@@ -60,14 +59,22 @@ function updateBorders() {
         const htmlEle = element;
         if (bordersEnabled && matchesTrackingStrings(element.id) && htmlEle.style.display != 'none') {
             // Check if the element already has borders
-            oldBorderColors[htmlEle.id] = htmlEle.style.borderColor;
+            const data = dataTracker[element.id] || {};
+            data.borderColor = htmlEle.style.borderColor;
+            data.borderWidth = htmlEle.style.borderWidth;
             let ele = document.createElement("div");
+            let divEle = document.createElement("div");
+            divEle.innerHTML = element.id;
             let parentEle = element.parentElement;
             if (parentEle != null) {
-                ele.classList.add("bordered-element");
                 parentEle.insertBefore(ele, element);
+                ele.classList.add("bordered-element");
+                data.headerEle = divEle;
+                divEle.style.backgroundColor = "white";
+                divEle.style.color = "black";
+                ele.appendChild(divEle);
                 ele.appendChild(element);
-                addedDivs[element.id] = ele;
+                data.newDiv = ele;
             }
             else {
                 if (!element.classList.contains('bordered-element')) {
@@ -76,21 +83,29 @@ function updateBorders() {
                 }
             }
             const randCol = getRandomColor();
-            htmlEle.style.borderColor = randCol + "";
+            ele.style.borderColor = randCol + "";
+            ele.style.backgroundColor = randCol + "";
             compIds.push({ id: element.id, color: randCol });
+            dataTracker[htmlEle.id] = data;
         }
         else {
             // Remove borders from the element
             const htmlEle = element;
-            const oldColor = oldBorderColors[htmlEle.id];
+            const oldColor = dataTracker[htmlEle.id] != null ? dataTracker[htmlEle.id].borderColor : null;
             if (oldColor)
                 htmlEle.style.borderColor = oldColor;
             else
                 htmlEle.style.borderColor = '';
-            const addedDiv = addedDivs[element.id];
-            if (addedDiv && addedDiv.parentElement) {
-                addedDiv.parentElement.replaceChild(element, addedDiv);
-                delete addedDivs[element.id];
+            const dt = dataTracker[htmlEle.id] != null ? dataTracker[htmlEle.id] : null;
+            if (dt != null) {
+                const addedDiv = dt.newDiv;
+                if (addedDiv && addedDiv.parentElement) {
+                    if (dt.headerEle != null) {
+                        addedDiv.removeChild(dt.headerEle);
+                    }
+                    addedDiv.parentElement.replaceChild(element, addedDiv);
+                    delete dataTracker[element.id];
+                }
             }
             element.classList.remove('bordered-element');
         }
