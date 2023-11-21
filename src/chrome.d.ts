@@ -21,7 +21,7 @@ declare namespace chrome {
         ): void;
         function sendMessage(
             message: any,
-            responseCallback?: { data: any; action: string }
+            responseCallback?: { data: any; action: string, options?: any }
         ): void;
     }
 

@@ -9,7 +9,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     var _a;
     switch (request.action) {
         case 'toggleBorders': {
-            toggleBorders(request.data);
+            const opts = request.options;
+            const displayNums = opts.displayNums || false;
+            const displayLabels = opts.displayLabels || false;
+            toggleBorders(request.data, displayNums, displayLabels);
             break;
         }
         case 'scrollToComp': {
@@ -35,24 +38,30 @@ let compIds = [];
 chrome.storage.sync.get('trackingStrings', (data) => {
     trackingStrings = data.trackingStrings || [];
 });
-function toggleBorders(newTrackingStrings) {
+function toggleBorders(newTrackingStrings, displayNums, displayLabels) {
     bordersEnabled = !bordersEnabled;
     if (newTrackingStrings) {
         trackingStrings = newTrackingStrings;
     }
-    updateBorders();
+    updateBorders(displayNums, displayLabels);
 }
 function getRandomColor() {
     // Generate random values for red, green, and blue components
     const randomRed = Math.floor(Math.random() * 256);
     const randomGreen = Math.floor(Math.random() * 256);
     const randomBlue = Math.floor(Math.random() * 256);
+    // Calculate luminance using the WCAG formula
+    const luminance = 0.2126 * randomRed / 255 + 0.7152 * randomGreen / 255 + 0.0722 * randomBlue / 255;
+    // Determine the contrast ratio threshold (4.5:1 for normal text)
+    const contrastThreshold = 4.5;
+    // Choose text color based on luminance
+    const textColor = luminance > contrastThreshold ? 'black' : 'white';
     // Construct the RGB color string
     const randomColor = `rgb(${randomRed}, ${randomGreen}, ${randomBlue})`;
-    return randomColor;
+    return { randomColor, textColor };
 }
 const dataTracker = {};
-function updateBorders() {
+function updateBorders(displayNums, displayLabels) {
     compIds = [];
     const elements = document.querySelectorAll('*');
     elements.forEach((element) => {
@@ -77,8 +86,8 @@ function updateBorders() {
                 data.newDiv = ele;
             }
             const randCol = getRandomColor();
-            ele.style.borderColor = randCol + "";
-            ele.style.backgroundColor = randCol + "";
+            ele.style.borderColor = randCol.randomColor + "";
+            ele.style.backgroundColor = randCol.randomColor + "";
             compIds.push({ id: element.id, color: randCol });
             dataTracker[htmlEle.id] = data;
         }
