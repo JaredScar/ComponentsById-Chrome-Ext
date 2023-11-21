@@ -76,12 +76,6 @@ function updateBorders() {
                 ele.appendChild(element);
                 data.newDiv = ele;
             }
-            else {
-                if (!element.classList.contains('bordered-element')) {
-                    // Add borders to the element
-                    element.classList.add('bordered-element');
-                }
-            }
             const randCol = getRandomColor();
             ele.style.borderColor = randCol + "";
             ele.style.backgroundColor = randCol + "";
@@ -107,7 +101,6 @@ function updateBorders() {
                     delete dataTracker[element.id];
                 }
             }
-            element.classList.remove('bordered-element');
         }
     });
     sendMessage({ action: "transferMatchingIds", data: compIds });
