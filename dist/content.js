@@ -9,6 +9,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     var _a;
     switch (request.action) {
         case 'toggleBorders': {
+            console.log("[DEBUG] request =>", request);
             const opts = request.options;
             const displayNums = opts.displayNums || false;
             const displayLabels = opts.displayLabels || false;
@@ -64,6 +65,7 @@ const dataTracker = {};
 function updateBorders(displayNums, displayLabels) {
     compIds = [];
     const elements = document.querySelectorAll('*');
+    let ind = 1;
     elements.forEach((element) => {
         const htmlEle = element;
         if (bordersEnabled && matchesTrackingStrings(element.id) && htmlEle.style.display != 'none') {
@@ -71,25 +73,36 @@ function updateBorders(displayNums, displayLabels) {
             const data = dataTracker[element.id] || {};
             data.borderColor = htmlEle.style.borderColor;
             data.borderWidth = htmlEle.style.borderWidth;
-            let ele = document.createElement("div");
-            let divEle = document.createElement("div");
-            divEle.innerHTML = element.id;
+            let masterEle = document.createElement("div");
+            let labelEle = document.createElement("div");
+            let numberEle = document.createElement("span");
+            numberEle.innerHTML = ind + "";
+            labelEle.innerHTML = element.id;
             let parentEle = element.parentElement;
-            if (parentEle != null) {
-                parentEle.insertBefore(ele, element);
-                ele.classList.add("bordered-element");
-                data.headerEle = divEle;
-                divEle.style.backgroundColor = "white";
-                divEle.style.color = "black";
-                ele.appendChild(divEle);
-                ele.appendChild(element);
-                data.newDiv = ele;
-            }
             const randCol = getRandomColor();
-            ele.style.borderColor = randCol.randomColor + "";
-            ele.style.backgroundColor = randCol.randomColor + "";
+            if (parentEle != null) {
+                parentEle.insertBefore(masterEle, element);
+                masterEle.classList.add("bordered-element");
+                labelEle.style.color = randCol.textColor;
+                numberEle.style.opacity = '.85';
+                numberEle.style.borderWidth = '1px';
+                numberEle.style.borderColor = randCol.randomColor;
+                numberEle.style.color = randCol.textColor;
+                if (displayNums) {
+                    masterEle.appendChild(numberEle);
+                }
+                if (displayLabels) {
+                    data.headerEle = labelEle;
+                    masterEle.appendChild(labelEle);
+                }
+                masterEle.appendChild(element);
+                data.newDiv = masterEle;
+            }
+            masterEle.style.borderColor = randCol.randomColor + "";
+            masterEle.style.backgroundColor = randCol.randomColor + "";
             compIds.push({ id: element.id, color: randCol });
             dataTracker[htmlEle.id] = data;
+            ind++;
         }
         else {
             // Remove borders from the element
@@ -112,7 +125,7 @@ function updateBorders(displayNums, displayLabels) {
             }
         }
     });
-    sendMessage({ action: "transferMatchingIds", data: compIds });
+    sendMessage({ action: "transferMatchingIds", data: compIds, options: { displayLabels: displayLabels, displayNums: displayNums } });
 }
 function sendMessage(message) {
     chrome.runtime.sendMessage(message);

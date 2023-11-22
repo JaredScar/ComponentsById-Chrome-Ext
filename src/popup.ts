@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
                 chrome.storage.sync.set({"isBordersOn": isBordersOn});
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings });
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: {displayNums: false, displayLabels: false} });
             }
         });
 
@@ -51,24 +51,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     let ind = 1;
                     for (let dat of request.data) {
                         let str: string = dat.id;
-                        let col: string = dat.color;
+                        let col: any = dat.color;
                         let ele = document.createElement("div");
                         let spanEle = undefined;
-                        if (displayLabels) {
-                            spanEle = document.createElement("span");
-                            spanEle.textContent = str;
-                            ele.classList.add("popup-link");
-                        }
+                        spanEle = document.createElement("span");
+                        spanEle.textContent = str;
+                        ele.classList.add("popup-link");
+                        let spanEleCircle = document.createElement("span");
+                        spanEleCircle.style.display = 'inline-block';
+                        spanEleCircle.style.border = '1px solid ' + col.randomColor;
+                        spanEleCircle.style.borderRadius = '50%';
+                        spanEleCircle.style.backgroundColor = col.randomColor;
+                        spanEleCircle.style.color = col.textColor;
+                        spanEleCircle.style.color = 'black';
+                        spanEleCircle.style.marginRight = '4px';
                         if (displayNums) {
-                            let spanEleCircle = document.createElement("span");
-                            spanEleCircle.style.borderWidth = '1px';
-                            spanEleCircle.style.borderColor = col;
-                            spanEleCircle.style.color = 'black';
                             spanEleCircle.textContent = ind + "";
-                            ele.append(spanEleCircle);
+                        } else {
+                            spanEleCircle.textContent = "C";
                         }
-                        if (displayLabels && spanEle)
-                            ele.append(spanEle);
+                        ele.append(spanEleCircle);
+                        ele.append(spanEle);
 
                         ele.addEventListener('click', function () {
                             sendMsg({action: "scrollToComp", data: str});
