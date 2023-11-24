@@ -32,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
                 chrome.storage.sync.set({"isBordersOn": isBordersOn});
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: {displayNums: false, displayLabels: false} });
+                const displayNums: boolean = false; // TODO Get value from checkbox in dropdown
+                const displayLabels: boolean = false; // TODO Get value from checkbox in dropdown
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: {displayNums: displayNums, displayLabels: displayLabels} });
             }
         });
 
@@ -55,20 +57,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         let ele = document.createElement("div");
                         let spanEle = undefined;
                         spanEle = document.createElement("span");
+                        spanEle.classList.add("component-list-id");
                         spanEle.textContent = str;
                         ele.classList.add("popup-link");
                         let spanEleCircle = document.createElement("span");
+                        spanEleCircle.classList.add("component-list-num");
                         spanEleCircle.style.display = 'inline-block';
-                        spanEleCircle.style.border = '1px solid ' + col.randomColor;
-                        spanEleCircle.style.borderRadius = '50%';
+                        spanEleCircle.style.borderRadius = '25%';
+                        spanEleCircle.style.textAlign = 'center';
+                        spanEleCircle.style.verticalAlign = 'middle';
                         spanEleCircle.style.backgroundColor = col.randomColor;
                         spanEleCircle.style.color = col.textColor;
-                        spanEleCircle.style.color = 'black';
                         spanEleCircle.style.marginRight = '4px';
                         if (displayNums) {
                             spanEleCircle.textContent = ind + "";
                         } else {
                             spanEleCircle.textContent = "C";
+                            spanEleCircle.style.borderRadius = '50%';
+                            spanEleCircle.style.width = '30px';
+                            spanEleCircle.style.height = '30px';
                         }
                         ele.append(spanEleCircle);
                         ele.append(spanEle);

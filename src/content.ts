@@ -8,7 +8,6 @@ chrome.runtime.onMessage.addListener(
     (request: any, sender: any, sendResponse: any) => {
         switch (request.action) {
             case 'toggleBorders': {
-                console.log("[DEBUG] request =>", request);
                 const opts = request.options;
                 const displayNums = opts.displayNums || false;
                 const displayLabels = opts.displayLabels || false;

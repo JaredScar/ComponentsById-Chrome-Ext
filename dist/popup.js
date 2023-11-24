@@ -54,11 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     ele.classList.add("popup-link");
                     let spanEleCircle = document.createElement("span");
                     spanEleCircle.style.display = 'inline-block';
-                    spanEleCircle.style.border = '1px solid ' + col.randomColor;
                     spanEleCircle.style.borderRadius = '50%';
+                    spanEleCircle.style.width = '25px';
+                    spanEleCircle.style.height = '25px';
+                    spanEleCircle.style.textAlign = 'center';
+                    spanEleCircle.style.verticalAlign = 'middle';
                     spanEleCircle.style.backgroundColor = col.randomColor;
                     spanEleCircle.style.color = col.textColor;
-                    spanEleCircle.style.color = 'black';
                     spanEleCircle.style.marginRight = '4px';
                     if (displayNums) {
                         spanEleCircle.textContent = ind + "";
