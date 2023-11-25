@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
                 chrome.storage.sync.set({ "isBordersOn": isBordersOn });
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: { displayNums: false, displayLabels: false } });
+                const displayNums = document.getElementById('numDisplay'); // Get value from checkbox in dropdown
+                const displayLabels = document.getElementById('labelDisplay'); // Get value from checkbox in dropdown
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: { displayNums: displayNums.checked, displayLabels: displayLabels.checked } });
             }
         });
         chrome.storage.sync.set({ 'trackingStrings': trackingStrings });
@@ -50,13 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     let ele = document.createElement("div");
                     let spanEle = undefined;
                     spanEle = document.createElement("span");
+                    spanEle.classList.add("component-list-id");
                     spanEle.textContent = str;
                     ele.classList.add("popup-link");
                     let spanEleCircle = document.createElement("span");
+                    spanEleCircle.classList.add("component-list-num");
                     spanEleCircle.style.display = 'inline-block';
-                    spanEleCircle.style.borderRadius = '50%';
-                    spanEleCircle.style.width = '25px';
-                    spanEleCircle.style.height = '25px';
+                    spanEleCircle.style.borderRadius = '25%';
                     spanEleCircle.style.textAlign = 'center';
                     spanEleCircle.style.verticalAlign = 'middle';
                     spanEleCircle.style.backgroundColor = col.randomColor;
@@ -67,6 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     else {
                         spanEleCircle.textContent = "C";
+                        spanEleCircle.style.borderRadius = '50%';
+                        spanEleCircle.style.width = '30px';
+                        spanEleCircle.style.height = '30px';
                     }
                     ele.append(spanEleCircle);
                     ele.append(spanEle);

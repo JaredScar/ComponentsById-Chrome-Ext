@@ -32,9 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
                 chrome.storage.sync.set({"isBordersOn": isBordersOn});
-                const displayNums: boolean = false; // TODO Get value from checkbox in dropdown
-                const displayLabels: boolean = false; // TODO Get value from checkbox in dropdown
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: {displayNums: displayNums, displayLabels: displayLabels} });
+                const displayNums: HTMLInputElement = <HTMLInputElement> document.getElementById('numDisplay'); // Get value from checkbox in dropdown
+                const displayLabels: HTMLInputElement = <HTMLInputElement> document.getElementById('labelDisplay'); // Get value from checkbox in dropdown
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: {displayNums: displayNums.checked, displayLabels: displayLabels.checked} });
             }
         });
 
