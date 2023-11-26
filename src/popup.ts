@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chrome.storage.sync.get("isBordersOn", (data) => {
         isBordersOn = data.isBordersOn || false;
+        chrome.storage.sync.get('compsList', (subData) => {
+            if (compsList && isBordersOn)
+                compsList.innerHTML = subData.compsList || '';
+        });
     });
     chrome.storage.sync.get('trackingStrings', (data) => {
         const storedTrackingStrings = data.trackingStrings || [];
         trackingInput.value = storedTrackingStrings.join(',');
-    });
-    chrome.storage.sync.get('compsList', (data) => {
-        if (compsList && isBordersOn)
-            compsList.innerHTML = data.compsList || '';
     });
 
     toggleButton.addEventListener('click', () => {
@@ -31,6 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
+                const btn: HTMLButtonElement = document.getElementById('dropdownMenuButton') as HTMLButtonElement;
+                if (isBordersOn) {
+                    // They have the borders on, we want to disable options...
+                    btn.disabled = true;
+                } else {
+                    // Reenable options...
+                    btn.disabled = false;
+                }
                 chrome.storage.sync.set({"isBordersOn": isBordersOn});
                 const displayNums: HTMLInputElement = <HTMLInputElement> document.getElementById('numDisplay'); // Get value from checkbox in dropdown
                 const displayLabels: HTMLInputElement = <HTMLInputElement> document.getElementById('labelDisplay'); // Get value from checkbox in dropdown
