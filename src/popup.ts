@@ -32,12 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
                 const btn: HTMLButtonElement = document.getElementById('dropdownMenuButton') as HTMLButtonElement;
+                const toggleBtn: HTMLButtonElement = document.getElementById('toggleButton') as HTMLButtonElement;
                 if (isBordersOn) {
                     // They have the borders on, we want to disable options...
                     btn.disabled = true;
+                    toggleBtn.classList.remove('btn-success');
+                    toggleBtn.classList.add("btn-danger");
                 } else {
                     // Reenable options...
                     btn.disabled = false;
+                    toggleBtn.classList.remove('btn-danger');
+                    toggleBtn.classList.add("btn-success");
                 }
                 chrome.storage.sync.set({"isBordersOn": isBordersOn});
                 const displayNums: HTMLInputElement = <HTMLInputElement> document.getElementById('numDisplay'); // Get value from checkbox in dropdown

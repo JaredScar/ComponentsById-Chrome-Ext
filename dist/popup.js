@@ -15,20 +15,34 @@ document.addEventListener('DOMContentLoaded', () => {
     let compsList = document.getElementById("components");
     chrome.storage.sync.get("isBordersOn", (data) => {
         isBordersOn = data.isBordersOn || false;
+        chrome.storage.sync.get('compsList', (subData) => {
+            if (compsList && isBordersOn)
+                compsList.innerHTML = subData.compsList || '';
+        });
     });
     chrome.storage.sync.get('trackingStrings', (data) => {
         const storedTrackingStrings = data.trackingStrings || [];
         trackingInput.value = storedTrackingStrings.join(',');
-    });
-    chrome.storage.sync.get('compsList', (data) => {
-        if (compsList && isBordersOn)
-            compsList.innerHTML = data.compsList || '';
     });
     toggleButton.addEventListener('click', () => {
         const trackingStrings = trackingInput.value.split(',').map(str => str.trim());
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs.length > 0) {
                 isBordersOn = !isBordersOn;
+                const btn = document.getElementById('dropdownMenuButton');
+                const toggleBtn = document.getElementById('toggleButton');
+                if (isBordersOn) {
+                    // They have the borders on, we want to disable options...
+                    btn.disabled = true;
+                    toggleBtn.classList.remove('btn-success');
+                    toggleBtn.classList.add("btn-danger");
+                }
+                else {
+                    // Reenable options...
+                    btn.disabled = false;
+                    toggleBtn.classList.remove('btn-danger');
+                    toggleBtn.classList.add("btn-success");
+                }
                 chrome.storage.sync.set({ "isBordersOn": isBordersOn });
                 const displayNums = document.getElementById('numDisplay'); // Get value from checkbox in dropdown
                 const displayLabels = document.getElementById('labelDisplay'); // Get value from checkbox in dropdown
