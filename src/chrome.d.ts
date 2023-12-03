@@ -9,7 +9,7 @@ declare namespace chrome {
     }
 
     namespace webNavigation {
-        const onCompleted: {
+        const onBeforeNavigate: {
             addListener(func: any): void;
         }
     }

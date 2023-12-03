@@ -18,17 +18,6 @@ chrome.runtime.onMessage.addListener(
                 document.getElementById(request.data)?.scrollIntoView({behavior: "smooth", block: "center"} as ScrollIntoViewOptions);
                 break;
             }
-            case 'bolderComp': {
-                const elem = document.getElementById(request.data);
-                if (elem) {
-                    const oldBorder = elem.style.borderWidth;
-                    elem.style.borderWidth = '4px';
-                    setTimeout(() => {
-                        elem.style.borderWidth = oldBorder;
-                    }, 3000);
-                }
-                break;
-            }
         }
     }
 );

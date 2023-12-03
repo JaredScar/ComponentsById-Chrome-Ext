@@ -9,11 +9,42 @@ function sendMsg(message: any) {
         }
     });
 }
+let bgColor: string = 'dark';
+function changeBgColor() {
+    const lightBtn: HTMLButtonElement = document.getElementById('lightbulbBtn') as HTMLButtonElement;
+    const body: HTMLBodyElement = document.getElementById('body') as HTMLBodyElement;
+    if (bgColor == 'dark') {
+        // Make it light
+        lightBtn.classList.remove("btn-light");
+        lightBtn.classList.add('btn-dark');
+        body.classList.remove('bg-dark');
+        body.classList.add('bg-light');
+        bgColor = 'light';
+    } else {
+        // Make it dark
+        lightBtn.classList.remove("btn-dark");
+        lightBtn.classList.add('btn-light');
+        body.classList.remove('bg-light');
+        body.classList.add('bg-dark');
+        bgColor = 'dark';
+    }
+    lightBtn.blur();
+    chrome.storage.sync.set({'bgColor': bgColor});
+}
 document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggleButton')!;
     const trackingInput = document.getElementById('trackingInput') as HTMLInputElement;
     let compsList = document.getElementById("components");
-
+    const lightBtn: HTMLButtonElement = document.getElementById('lightbulbBtn') as HTMLButtonElement;
+    chrome.storage.sync.get("bgColor", (data) => {
+        bgColor = data.bgColor || 'dark';
+        if (bgColor == 'dark')
+            bgColor = 'light';
+        else
+            bgColor = 'dark';
+        changeBgColor();
+    });
+    lightBtn.addEventListener('click', changeBgColor);
     chrome.storage.sync.get("isBordersOn", (data) => {
         isBordersOn = data.isBordersOn || false;
         chrome.storage.sync.get('compsList', (subData) => {

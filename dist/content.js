@@ -19,17 +19,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             (_a = document.getElementById(request.data)) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ behavior: "smooth", block: "center" });
             break;
         }
-        case 'bolderComp': {
-            const elem = document.getElementById(request.data);
-            if (elem) {
-                const oldBorder = elem.style.borderWidth;
-                elem.style.borderWidth = '4px';
-                setTimeout(() => {
-                    elem.style.borderWidth = oldBorder;
-                }, 3000);
-            }
-            break;
-        }
     }
 });
 let bordersEnabled = false;
