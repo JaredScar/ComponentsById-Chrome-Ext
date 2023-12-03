@@ -6,11 +6,11 @@
   "permissions": [
     "activeTab",
     "storage",
-    "scripting"
+    "webNavigation"
   ],
   "browser_action": {
     "default_icon": {
-      "128": "icons/icon48.png"
+      "48": "icons/icons8-highlight-48.png"
     },
     "default_title": "ComponentsByID Browser Ext",
     "default_popup": "popup.html"
@@ -22,6 +22,10 @@
       "run_at": "document_end"
     }
   ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "web_accessible_resources": [
     "content.css"
   ]

@@ -8,6 +8,12 @@ declare namespace chrome {
         function sendMessage(message: any): void;
     }
 
+    namespace webNavigation {
+        const onCompleted: {
+            addListener(func: any): void;
+        }
+    }
+
     namespace tabs {
         interface Tab {
             // Define the properties of the Tab type

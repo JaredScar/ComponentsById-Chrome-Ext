@@ -16,8 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.get("isBordersOn", (data) => {
         isBordersOn = data.isBordersOn || false;
         chrome.storage.sync.get('compsList', (subData) => {
-            if (compsList && isBordersOn)
+            if (compsList && isBordersOn) {
+                const btn = document.getElementById('dropdownMenuButton');
+                const toggleBtn = document.getElementById('toggleButton');
+                const compListContainer = document.getElementById('componentListContainer');
+                btn.disabled = true;
+                toggleBtn.classList.remove('btn-success');
+                toggleBtn.classList.add("btn-danger");
+                compListContainer.style.display = 'block';
                 compsList.innerHTML = subData.compsList || '';
+            }
         });
     });
     chrome.storage.sync.get('trackingStrings', (data) => {
@@ -31,17 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 isBordersOn = !isBordersOn;
                 const btn = document.getElementById('dropdownMenuButton');
                 const toggleBtn = document.getElementById('toggleButton');
+                const compListContainer = document.getElementById('componentListContainer');
                 if (isBordersOn) {
                     // They have the borders on, we want to disable options...
                     btn.disabled = true;
                     toggleBtn.classList.remove('btn-success');
                     toggleBtn.classList.add("btn-danger");
+                    compListContainer.style.display = 'block';
                 }
                 else {
                     // Reenable options...
                     btn.disabled = false;
                     toggleBtn.classList.remove('btn-danger');
                     toggleBtn.classList.add("btn-success");
+                    compListContainer.style.display = 'none';
                 }
                 chrome.storage.sync.set({ "isBordersOn": isBordersOn });
                 const displayNums = document.getElementById('numDisplay'); // Get value from checkbox in dropdown
