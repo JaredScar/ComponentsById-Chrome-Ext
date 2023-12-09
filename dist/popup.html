@@ -7,10 +7,24 @@
     <style>
         body {
             width: 400px;
+            max-width: 600px;
             min-height: 160px;
+            max-height: 100vh;
             padding: 10px;
         }
-
+        #components {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .component-list-id {
+            display: inline-block;
+            vertical-align: middle;
+            width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         button {
             width: 100%;
         }

@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const displayNums = document.getElementById('numDisplay'); // Get value from checkbox in dropdown
                 const displayLabels = document.getElementById('labelDisplay'); // Get value from checkbox in dropdown
                 chrome.tabs.sendMessage(tabs[0].id, { action: 'toggleBorders', data: trackingStrings, options: { displayNums: displayNums.checked, displayLabels: displayLabels.checked } });
+                btn.blur();
             }
         });
         chrome.storage.sync.set({ 'trackingStrings': trackingStrings });
@@ -118,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     spanEleCircle.style.display = 'inline-block';
                     spanEleCircle.style.borderRadius = '25%';
                     spanEleCircle.style.textAlign = 'center';
+                    spanEleCircle.style.paddingLeft = "4px";
+                    spanEleCircle.style.paddingRight = "4px";
                     spanEleCircle.style.verticalAlign = 'middle';
                     spanEleCircle.style.backgroundColor = col.randomColor;
                     spanEleCircle.style.color = col.textColor;
