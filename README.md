@@ -9,8 +9,6 @@ The idea for `ComponentsByID` is that you may have components on a webpage which
 ![Options via ComponentsById](img_2.png)
 
 ![Borders toggled via ComponentsById](img_3.png)
-
-![Border toggle functionality via ComponentsById](img_4.png)
 ## Idea Origin
 When working with components on the myAvatar NX application for my tenure at Netsmart, I realized there was some difficulty debugging things since the code was tied together by IDs for inputs within the application. To solve this, I figured an application like this would be some use.
 ## Installation
